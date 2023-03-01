@@ -3,7 +3,7 @@
 
 ### Team_Meeting_Times
 
-* Daily Standup: 10am
+* Daily Standup: 2pm
 
 ### CODE_OF_CONDUCT
 
@@ -76,5 +76,5 @@
 | Signed | Date |
 |-|-|
 | Andrew Ellen | 01.03.2023 |
-|  | 01.03.2023 |
+| Alister Garrow | 01.03.2023 |
 |  | 01.03.2023 |
