@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public InputActionAsset actionAsset;
+    [SerializeField]private InputActionAsset actionAsset;
     private InputAction jumpAction;
     public InputAction moveAction;
     GameObject jumpTarget;
@@ -40,7 +40,10 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        characterController.Move(moveAction.ReadValue<Vector3>() * MovementSpeed * Time.deltaTime);
+        
+
+        Vector3 move = transform.right * moveAction.ReadValue<Vector3>().x + transform.forward * moveAction.ReadValue<Vector3>().z;
+        characterController.Move(move * MovementSpeed * Time.deltaTime);
 
         if (jumpAction.triggered && isGrounded)
         {
