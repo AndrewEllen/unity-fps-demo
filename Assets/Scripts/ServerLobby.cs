@@ -16,6 +16,9 @@ public class ServerLobby : MonoBehaviour
     [Header("Server Players Object")]
     [SerializeField] private Slider serverPlayersInput;
 
+    private Lobby currentlyHostedLobby;
+
+
     private async void Start() {
         await UnityServices.InitializeAsync();
 
@@ -24,6 +27,15 @@ public class ServerLobby : MonoBehaviour
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        InvokeRepeating("KeepLobbyAliveWhileHostJoined", 0f, 15f);
+    }
+
+    async void asyncKeepLobbyAliveWhileHostJoined() {
+        if (currentlyHostedLobby is not null) {
+            Debug.Log("HeartBeat sent");
+            await LobbyService.Instance.SendHeartbeatPingAsync(currentlyHostedLobby.Id);
+        }
     }
 
     public async void CreateNewLobby() {
@@ -34,7 +46,7 @@ public class ServerLobby : MonoBehaviour
 
             Lobby newLobby = await LobbyService.Instance.CreateLobbyAsync(nameOfTheLobby, maxPlayersAllowedInLobby);
 
-            await LobbyService.Instance.JoinLobbyByCodeAsync(newLobby.LobbyCode);
+            currentlyHostedLobby = newLobby;
 
             Debug.Log("Lobby Name: "+ newLobby.Name + " Lobby Max Player Count: " + newLobby.MaxPlayers);
 
