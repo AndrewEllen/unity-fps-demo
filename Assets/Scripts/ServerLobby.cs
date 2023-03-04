@@ -26,7 +26,7 @@ public class ServerLobby : MonoBehaviour
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
-    private async void CreateLobby() {
+    public async void CreateNewLobby() {
         try {
 
             string nameOfTheLobby = serverNameInput.text;
@@ -34,12 +34,23 @@ public class ServerLobby : MonoBehaviour
 
             Lobby newLobby = await LobbyService.Instance.CreateLobbyAsync(nameOfTheLobby, maxPlayersAllowedInLobby);
 
+            await LobbyService.Instance.JoinLobbyByCodeAsync(newLobby.LobbyCode);
+
             Debug.Log("Lobby Name: "+ newLobby.Name + " Lobby Max Player Count: " + newLobby.MaxPlayers);
 
         } catch (LobbyServiceException error) {
             Debug.Log(error);
         }
 
+    }
+
+    public async void DisplayLobbyList() {
+        QueryResponse response = await Lobbies.Instance.QueryLobbiesAsync();
+
+
+        foreach (Lobby lobby in response.Results) {
+            Debug.Log("Found Lobby: " + lobby.Name + " with max player count of: " + lobby.MaxPlayers + " and ID of " + lobby.Id);
+        }
     }
 
 }
