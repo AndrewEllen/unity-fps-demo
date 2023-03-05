@@ -65,7 +65,7 @@ public class ServerLobby : MonoBehaviour
 
             InvokeRepeating("KeepLobbyAliveWhileHostJoined", 0f, 15f);
 
-            Debug.Log("Lobby Name: "+ newLobby.Name + " Lobby Max Player Count: " + newLobby.MaxPlayers);
+            Debug.Log("Lobby Name: "+ newLobby.Name + " Lobby Max Player Count: " + newLobby.MaxPlayers + " with lobby code of: " + newLobby.LobbyCode);
 
         } catch (LobbyServiceException error) {
 
@@ -80,10 +80,13 @@ public class ServerLobby : MonoBehaviour
     }
 
     public async void JoinLobby() {
-        if (serverCodeInput.text is not null) {
+        Debug.Log(serverCodeInput.text);
+        Debug.Log(serverCodeInput.text.Length);
+        if (serverCodeInput.text is not null && serverCodeInput.text.Length == 7) {
 
             try {
 
+                Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
 
             } catch (LobbyServiceException error) {
@@ -96,6 +99,7 @@ public class ServerLobby : MonoBehaviour
 
             try {
 
+                Debug.Log("Public");
                 currentlyConnectedLobby = await LobbyService.Instance.QuickJoinLobbyAsync();
 
             } catch (LobbyServiceException error) {
