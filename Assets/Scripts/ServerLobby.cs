@@ -88,9 +88,9 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
-                foreach (object player in currentlyConnectedLobby.Players) {
-                    var output = JsonUtility.ToJson(player, true);
-                    Debug.Log(output);
+                foreach (var player in currentlyConnectedLobby.Players) {
+                   // var output = JsonUtility.ToJson(player, true);
+                    Debug.Log("Hello " + player.Id);
                 }
                 Debug.Log(currentlyConnectedLobby.Players);
 
