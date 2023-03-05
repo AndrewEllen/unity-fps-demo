@@ -89,10 +89,8 @@ public class ServerLobby : MonoBehaviour
                 Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
                 foreach (var player in currentlyConnectedLobby.Players) {
-                   // var output = JsonUtility.ToJson(player, true);
-                    Debug.Log("Hello " + player.Id);
+                    Debug.Log("Player ID: " + player.Id);
                 }
-                Debug.Log(currentlyConnectedLobby.Players);
 
             } catch (LobbyServiceException error) {
 
@@ -106,7 +104,9 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Public");
                 currentlyConnectedLobby = await LobbyService.Instance.QuickJoinLobbyAsync();
-                Debug.Log(currentlyConnectedLobby.Players);
+                foreach (var player in currentlyConnectedLobby.Players) {
+                    Debug.Log("Player ID: " + player.Id);
+                }
 
             } catch (LobbyServiceException error) {
 
