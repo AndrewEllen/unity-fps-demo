@@ -12,7 +12,7 @@ public class ServerLobby : MonoBehaviour
 {
 
     [Header("Server Name Object")]
-    [SerializeField] private TextMeshProUGUI serverNameInput;
+    [SerializeField] private TMP_InputField serverNameInput;
 
     [Header("Server Players Object")]
     [SerializeField] private Slider serverPlayersInput;
@@ -23,8 +23,8 @@ public class ServerLobby : MonoBehaviour
     [Header("Server Public Lobby Object")]
     [SerializeField] private Toggle publicServerInput;
 
-    [Header("Server Name Object")]
-    [SerializeField] private TextMeshProUGUI serverCodeInput;
+    [Header("Server Code Object")]
+    [SerializeField] private TMP_InputField serverCodeInput;
 
     private Lobby currentlyConnectedLobby;
     private string playerID;
@@ -82,12 +82,16 @@ public class ServerLobby : MonoBehaviour
     public async void JoinLobby() {
         Debug.Log(serverCodeInput.text);
         Debug.Log(serverCodeInput.text.Length);
-        if (serverCodeInput.text is not null && serverCodeInput.text.Length == 7) {
+        if (serverCodeInput.text is not null && serverCodeInput.text.Length == 6) {
 
             try {
 
                 Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
+                foreach (object player in currentlyConnectedLobby.Players) {
+                    var output = JsonUtility.ToJson(player, true);
+                    Debug.Log(output);
+                }
                 Debug.Log(currentlyConnectedLobby.Players);
 
             } catch (LobbyServiceException error) {

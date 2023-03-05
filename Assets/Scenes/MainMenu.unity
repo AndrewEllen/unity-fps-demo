@@ -4768,11 +4768,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9a8a8ec1d7f60843926b72803fb319c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverNameInput: {fileID: 1460410377}
+  serverNameInput: {fileID: 2136390991}
   serverPlayersInput: {fileID: 192878935}
   sliderValueDisplay: {fileID: 213202019}
   publicServerInput: {fileID: 798106609}
-  serverCodeInput: {fileID: 86448424}
+  serverCodeInput: {fileID: 319983135}
 --- !u!1 &1608678596
 GameObject:
   m_ObjectHideFlags: 0
