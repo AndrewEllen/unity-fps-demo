@@ -88,6 +88,7 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
+                Debug.Log(currentlyConnectedLobby.Players);
 
             } catch (LobbyServiceException error) {
 
@@ -101,6 +102,7 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Public");
                 currentlyConnectedLobby = await LobbyService.Instance.QuickJoinLobbyAsync();
+                Debug.Log(currentlyConnectedLobby.Players);
 
             } catch (LobbyServiceException error) {
 
