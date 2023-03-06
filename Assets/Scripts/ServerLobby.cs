@@ -56,6 +56,20 @@ public class ServerLobby : MonoBehaviour
         }
     }
 
+    async void PollForLobbyUpdates() {
+        if (currentlyConnectedLobby is not null) {
+            Lobby currentlyConnectedLobbyUpdate = await LobbyService.Instance.GetLobbyAsync(currentlyConnectedLobby.Id);
+            if (currentlyConnectedLobbyUpdate != currentlyConnectedLobby) {
+
+                currentlyConnectedLobby = currentlyConnectedLobbyUpdate;
+        
+                foreach (var player in currentlyConnectedLobby.Players) {
+                    Debug.Log("Player ID: " + player.Id);
+                }
+            }
+        }
+    }
+
     public async void CreateNewLobby() {
         try {
 
@@ -91,11 +105,13 @@ public class ServerLobby : MonoBehaviour
             if (currentlyConnectedLobby != null) {
                 serverMenu.gameObject.SetActive(false);
                 lobbyMenu.gameObject.SetActive(true);
+                InvokeRepeating("KeepLobbyAliveWhileHostJoined", 0f, 1.2f);
             }
         } else {
             if (currentlyConnectedLobby != null) {
                 serverMenu.gameObject.SetActive(false);
                 lobbyMenu.gameObject.SetActive(true);
+                InvokeRepeating("KeepLobbyAliveWhileHostJoined", 0f, 1.2f);
             }
         }
     }
@@ -144,6 +160,7 @@ public class ServerLobby : MonoBehaviour
             if (playerID == currentlyConnectedLobby.HostId) {
                 await LobbyService.Instance.DeleteLobbyAsync(currentlyConnectedLobby.Id);
                 currentlyConnectedLobby = null;
+                CancelInvoke("KeepLobbyAliveWhileHostJoined");
             }
             else {
                 await LobbyService.Instance.RemovePlayerAsync(currentlyConnectedLobby.Id, playerID);
@@ -155,6 +172,7 @@ public class ServerLobby : MonoBehaviour
             Debug.Log(error);
 
         }
+        CancelInvoke("PollForLobbyUpdates");
     }
 
 }
