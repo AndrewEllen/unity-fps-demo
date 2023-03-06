@@ -59,7 +59,7 @@ public class ServerLobby : MonoBehaviour
     async void PollForLobbyUpdates() {
         if (currentlyConnectedLobby is not null) {
             Lobby currentlyConnectedLobbyUpdate = await LobbyService.Instance.GetLobbyAsync(currentlyConnectedLobby.Id);
-            if (currentlyConnectedLobbyUpdate != currentlyConnectedLobby) {
+            if (currentlyConnectedLobbyUpdate.Players.Count != currentlyConnectedLobby.Players.Count) {
 
                 currentlyConnectedLobby = currentlyConnectedLobbyUpdate;
         
@@ -105,13 +105,13 @@ public class ServerLobby : MonoBehaviour
             if (currentlyConnectedLobby != null) {
                 serverMenu.gameObject.SetActive(false);
                 lobbyMenu.gameObject.SetActive(true);
-                InvokeRepeating("KeepLobbyAliveWhileHostJoined", 0f, 1.2f);
+                InvokeRepeating("PollForLobbyUpdates", 0f, 1.2f);
             }
         } else {
             if (currentlyConnectedLobby != null) {
                 serverMenu.gameObject.SetActive(false);
                 lobbyMenu.gameObject.SetActive(true);
-                InvokeRepeating("KeepLobbyAliveWhileHostJoined", 0f, 1.2f);
+                InvokeRepeating("PollForLobbyUpdates", 0f, 1.2f);
             }
         }
     }
