@@ -26,6 +26,13 @@ public class ServerLobby : MonoBehaviour
     [Header("Server Code Object")]
     [SerializeField] private TMP_InputField serverCodeInput;
 
+    [Header("Server Menu")]
+    [SerializeField] private GameObject serverMenu;
+
+    [Header("Lobby Menu")]
+    [SerializeField] private GameObject lobbyMenu;
+
+
     private Lobby currentlyConnectedLobby;
     private string playerID;
 
@@ -72,11 +79,25 @@ public class ServerLobby : MonoBehaviour
             Debug.Log(error);
 
         }
-
+        DisplayLobbyScreen(true);
     }
 
     public void ChangeMaxPlayerHandleValue() {
         sliderValueDisplay.text = Mathf.RoundToInt(serverPlayersInput.value).ToString();
+    }
+
+    public void DisplayLobbyScreen(bool _creatingServer) {
+        if (_creatingServer) {
+            if (currentlyConnectedLobby != null) {
+                serverMenu.gameObject.SetActive(false);
+                lobbyMenu.gameObject.SetActive(true);
+            }
+        } else {
+            if (currentlyConnectedLobby != null) {
+                serverMenu.gameObject.SetActive(false);
+                lobbyMenu.gameObject.SetActive(true);
+            }
+        }
     }
 
     public async void JoinLobby() {
@@ -114,6 +135,7 @@ public class ServerLobby : MonoBehaviour
 
             }
         }
+        DisplayLobbyScreen(false);
     }
 
     public async void LeaveLobby() {
@@ -121,9 +143,11 @@ public class ServerLobby : MonoBehaviour
 
             if (playerID == currentlyConnectedLobby.HostId) {
                 await LobbyService.Instance.DeleteLobbyAsync(currentlyConnectedLobby.Id);
+                currentlyConnectedLobby = null;
             }
             else {
                 await LobbyService.Instance.RemovePlayerAsync(currentlyConnectedLobby.Id, playerID);
+                currentlyConnectedLobby = null;
             }
 
         } catch (LobbyServiceException error) {

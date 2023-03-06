@@ -2632,30 +2632,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1608051928}
-        m_TargetAssemblyTypeName: MainMenuScript, Assembly-CSharp
-        m_MethodName: DisplayMenu
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1587262101}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1608051928}
-        m_TargetAssemblyTypeName: MainMenuScript, Assembly-CSharp
-        m_MethodName: DisplayMenu
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1079186704}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &635227515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4773,6 +4749,8 @@ MonoBehaviour:
   sliderValueDisplay: {fileID: 213202019}
   publicServerInput: {fileID: 798106609}
   serverCodeInput: {fileID: 319983135}
+  serverMenu: {fileID: 0}
+  lobbyMenu: {fileID: 0}
 --- !u!1 &1608678596
 GameObject:
   m_ObjectHideFlags: 0
@@ -5566,30 +5544,6 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1608051928}
-        m_TargetAssemblyTypeName: MainMenuScript, Assembly-CSharp
-        m_MethodName: DisplayMenu
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1587262101}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1608051928}
-        m_TargetAssemblyTypeName: MainMenuScript, Assembly-CSharp
-        m_MethodName: DisplayMenu
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1079186704}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
