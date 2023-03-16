@@ -38,10 +38,6 @@ public class MouseControl : MonoBehaviour
         transform.localRotation = Quaternion.Euler(UDRotation, 0f, 0f);
 
         my_Body.transform.Rotate(m_LRRotationInput * Time.deltaTime * LRmouseSensitivity);
-
-        //myCamera.gameObject.transform.Rotate(new Vector3(, -70f, 40f), 0, 0), 1);
-        // myCamera.gameObject.transform.localRotation = Quaternion.Euler(Mathf.Clamp((-m_YRotationInput.x * Time.deltaTime * mouseSensitivity),-70f,40f), 0f, 0f);
-        //myCamera.transform.Rotate(Vector3.up * m_xRotationInput.y);
-
+          
     }
 }
