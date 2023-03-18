@@ -25,6 +25,11 @@ public class BulletScript : MonoBehaviour
     void Update()
     {
         transform.position += rb.velocity * Time.deltaTime;
+
+        if (transform.position.y < -10 || transform.position.x > 5000 | transform.position.z > 5000)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b0e6df0b3664a4496ca29da8e135d4, type: 3}
   m_Name: Basic_Bulllet
   m_EditorClassIdentifier: 
-  myBullet: {fileID: 3341330384052056611, guid: dbbf928bb0f50964da10adcc3ccada36, type: 3}
+  myBullet: {fileID: 3648877568765068336, guid: acc22ae8819abe24b831df23a01346b1, type: 3}
