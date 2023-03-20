@@ -12,6 +12,9 @@ public class MyGun : MonoBehaviour
     [SerializeField] private Transform myBulletSpawnTransform;
     [SerializeField] private float myPower;
     [SerializeField] GameObject myPlayer;
+
+    private bool _allowedToFire;
+
     private void Awake()
     {
         fireAction = actionAsset.FindAction("Fire");
@@ -26,17 +29,27 @@ public class MyGun : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (fireAction.triggered)
-        {
-            
-            GameObject bullet = Instantiate(myBullet, myBulletSpawnTransform.position, myBulletSpawnTransform.rotation);
-            bullet.GetComponent<Rigidbody>().AddForce(myBulletSpawnTransform.forward * myPower);
-            bullet.GetComponent<BulletScript>().SetMyPlayer(myPlayer);
+    void Update() {
+
+        //Followed help on forum here https://answers.unity.com/questions/132154/how-to-limit-the-players-rate-of-fire.html
+        
+        if (fireAction.triggered && _allowedToFire) {
+            StartCoroutine(FireWhilePressed());
         }
 
-       
+    }
+
+    IEnumerator FireWhilePressed() {
+
+        _allowedToFire = false;
+
+        GameObject bullet = Instantiate(myBullet, myBulletSpawnTransform.position, myBulletSpawnTransform.rotation);
+        bullet.GetComponent<Rigidbody>().AddForce(myBulletSpawnTransform.forward * myPower);
+        bullet.GetComponent<BulletScript>().SetMyPlayer(myPlayer);
+
+        yield return new WaitForSeconds(1f);
+        _allowedToFire = true;
+
     }
 
 
