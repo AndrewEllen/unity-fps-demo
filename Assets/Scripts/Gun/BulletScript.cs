@@ -19,13 +19,6 @@ public class BulletScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -71,7 +64,6 @@ public class BulletScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
         try {
             if (playerModelTagList.Contains(collision.gameObject.tag.ToLower())) {
 
@@ -79,8 +71,8 @@ public class BulletScript : MonoBehaviour
 
                 //the default damage value. Could be changed depending on the gun/bullet
                 int damageValue = 1;
-                
-                collision.gameObject.GetComponentInParent<Test_player_health>().UpdateHeath(damageValue * damageMultiplier);
+
+                collision.gameObject.GetComponentInParent<Test_player_health>().UpdateHeath(damageValue * damageMultiplier, collision.gameObject.tag.ToString());
                 myPlayerAudio.Play();
             }
         } catch {
