@@ -11,7 +11,7 @@ public class BulletScript : MonoBehaviour
 
     private AudioSource myPlayerAudio;
 
-    private string[] playerModelTagList = {"body","head","enemy"};
+    private string[] playerModelTagList = {"enemy","head","neck","uppertorso","lowertorso","arm","hand","leg","foot"};
 
     private int damageMultiplier;
 
@@ -41,9 +41,27 @@ public class BulletScript : MonoBehaviour
         int damageMultiplierValue = 1;
 
         if (bodyTag == "head") {
-            damageMultiplierValue = 3;
+            damageMultiplierValue = 10;
         } 
-        else if (bodyTag == "body") {
+        else if (bodyTag == "neck") {
+            damageMultiplierValue = 9;
+        }
+        else if (bodyTag == "uppertorso") {
+            damageMultiplierValue = 5;
+        }
+        else if (bodyTag == "lowertorso") {
+            damageMultiplierValue = 4;
+        }
+        else if (bodyTag == "arm") {
+            damageMultiplierValue = 3;
+        }
+        else if (bodyTag == "hand") {
+            damageMultiplierValue = 1;
+        }
+        else if (bodyTag == "leg") {
+            damageMultiplierValue = 3;
+        }
+        else if (bodyTag == "foot") {
             damageMultiplierValue = 1;
         }
 
@@ -59,13 +77,9 @@ public class BulletScript : MonoBehaviour
 
                 damageMultiplier = getDamageMultipliers(collision.gameObject.tag.ToLower());
 
-                Debug.Log("hello");
-
                 //the default damage value. Could be changed depending on the gun/bullet
                 int damageValue = 1;
-
-                Debug.Log(damageMultiplier);
-
+                
                 collision.gameObject.GetComponentInParent<Test_player_health>().UpdateHeath(damageValue * damageMultiplier);
                 myPlayerAudio.Play();
             }

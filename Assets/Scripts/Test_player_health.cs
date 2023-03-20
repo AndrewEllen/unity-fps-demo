@@ -12,6 +12,8 @@ public class Test_player_health : MonoBehaviour
 
         health -= damageTaken;
 
+        Debug.Log("target health is: " + health);
+
         if (health <= 0) {
             Destroy(this.gameObject);
         }
