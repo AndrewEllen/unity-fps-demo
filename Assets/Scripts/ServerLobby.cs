@@ -57,6 +57,7 @@ public class ServerLobby : MonoBehaviour
     }
 
     async void PollForLobbyUpdates() {
+        //todo leave lobby when not found
         if (currentlyConnectedLobby is not null) {
             Lobby currentlyConnectedLobbyUpdate = await LobbyService.Instance.GetLobbyAsync(currentlyConnectedLobby.Id);
             if (currentlyConnectedLobbyUpdate.Players.Count != currentlyConnectedLobby.Players.Count) {
