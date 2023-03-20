@@ -13,7 +13,7 @@ public class MyGun : MonoBehaviour
     [SerializeField] private float myPower;
     [SerializeField] GameObject myPlayer;
 
-    private bool _allowedToFire;
+    private bool _allowedToFire = true;
 
     private void Awake()
     {
@@ -32,7 +32,7 @@ public class MyGun : MonoBehaviour
     void Update() {
 
         //Followed help on forum here https://answers.unity.com/questions/132154/how-to-limit-the-players-rate-of-fire.html
-        
+
         if (fireAction.triggered && _allowedToFire) {
             StartCoroutine(FireWhilePressed());
         }
@@ -47,7 +47,7 @@ public class MyGun : MonoBehaviour
         bullet.GetComponent<Rigidbody>().AddForce(myBulletSpawnTransform.forward * myPower);
         bullet.GetComponent<BulletScript>().SetMyPlayer(myPlayer);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
         _allowedToFire = true;
 
     }
