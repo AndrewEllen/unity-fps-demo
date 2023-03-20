@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -9,6 +10,10 @@ public class BulletScript : MonoBehaviour
     private float bulletSpeed = 5f;
 
     private AudioSource myPlayerAudio;
+
+    private string[] playerModelTagList = {"body","head","enemy"};
+
+    private int damageMultiplier;
 
     private void Awake()
     {
@@ -32,20 +37,45 @@ public class BulletScript : MonoBehaviour
         }
     }
 
+    private int getDamageMultipliers(string bodyTag) {
+        int damageMultiplierValue = 1;
+
+        if (bodyTag == "head") {
+            damageMultiplierValue = 3;
+        } 
+        else if (bodyTag == "body") {
+            damageMultiplierValue = 1;
+        }
+
+        return damageMultiplierValue;
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
+
+        try {
+            if (playerModelTagList.Contains(collision.gameObject.tag.ToLower())) {
+
+                damageMultiplier = getDamageMultipliers(collision.gameObject.tag.ToLower());
+
+                Debug.Log("hello");
+
+                //the default damage value. Could be changed depending on the gun/bullet
+                int damageValue = 1;
+
+                Debug.Log(damageMultiplier);
+
+                collision.gameObject.GetComponentInParent<Test_player_health>().UpdateHeath(damageValue * damageMultiplier);
+                myPlayerAudio.Play();
+            }
+        } catch {
+
+        }
         /// take health from collsion if player
         /// partical effect if want
         /// inform player who shot bullet that it hit
         /// destory bullet
-        if (collision.gameObject.tag == "Enemy")
-        {
-            Debug.Log("hello");
-            collision.gameObject.GetComponent<Test_player_health>().UpdateHeath();
-            myPlayerAudio.Play();
-        }
-
         Destroy(this.gameObject);
     }
 

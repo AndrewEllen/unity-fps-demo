@@ -4,21 +4,16 @@ using UnityEngine;
 
 public class Test_player_health : MonoBehaviour
 {
-    [SerializeField] private Material[] healths;
-    int count = 0;
-
-    private void Awake()
-    {
-        this.GetComponent<MeshRenderer>().material = healths[count];
-    }
+    [SerializeField] private int health;
+    int damageTaken = 0;
 
 
-    public void UpdateHeath()
-    {
-        count++;
-        if (count < healths.Length)
-            this.GetComponent<MeshRenderer>().material = healths[count];
-        else
+    public void UpdateHeath(int damageTaken) {
+
+        health -= damageTaken;
+
+        if (health <= 0) {
             Destroy(this.gameObject);
+        }
     }
 }
