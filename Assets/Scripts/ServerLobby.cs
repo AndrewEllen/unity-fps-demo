@@ -8,6 +8,9 @@ using Unity.Services.Core;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
 
 public class ServerLobby : MonoBehaviour
 {
@@ -38,6 +41,14 @@ public class ServerLobby : MonoBehaviour
 
     private Lobby currentlyConnectedLobby;
     private string playerID;
+
+
+    //Relay Variables
+    //Tutorial being used for this
+    //https://www.youtube.com/watch?v=RtBf4v0LjHU 
+    private RelayHostData _hostData;
+    private RelayJoinData _joinData;
+
 
 
     private async void Start() {
@@ -114,6 +125,19 @@ public class ServerLobby : MonoBehaviour
 
     public async void CreateNewLobby() {
         try {
+            //The value inside CreateAllocationAsync is the external connections
+            Allocation relayEntryPointAllocation = await Relay.Instance.CreateAllocationAsync(Mathf.RoundToInt(serverPlayersInput.value)-1);
+            _hostData = new RelayHostData {
+                key = relayEntryPointAllocation.Key,
+                port = (ushort) relayEntryPointAllocation.RelayServer.Port,
+                allocationID = relayEntryPointAllocation.AllocationId,
+                allocationIDBytes = relayEntryPointAllocation.AllocationIdBytes,
+                connectionData = relayEntryPointAllocation.ConnectionData,
+                ipv4Address = relayEntryPointAllocation.RelayServer.IpV4
+            };
+
+            //Join Code
+            _hostData.joinCode = await Relay.Instance.GetJoinCodeAsync(relayEntryPointAllocation.AllocationId);
 
             string nameOfTheLobby = serverNameInput.text;
             int maxPlayersAllowedInLobby = Mathf.RoundToInt(serverPlayersInput.value);
@@ -121,6 +145,16 @@ public class ServerLobby : MonoBehaviour
             CreateLobbyOptions newLobbyOptions = new CreateLobbyOptions();
 
             newLobbyOptions.IsPrivate = !publicServerInput;
+
+            //Lobby Options
+            newLobbyOptions.Data = new Dictionary<string, DataObject>() {
+                {
+                    "joinCode", new DataObject(
+                        visibility: DataObject.VisibilityOptions.Member,
+                        value: _hostData.joinCode
+                        )
+                },
+            };
 
             Lobby newLobby = await LobbyService.Instance.CreateLobbyAsync(nameOfTheLobby, maxPlayersAllowedInLobby, newLobbyOptions);
 
@@ -221,5 +255,35 @@ public class ServerLobby : MonoBehaviour
         }
         CancelInvoke("PollForLobbyUpdates");
     }
+
+}
+
+
+//Relay Host Data
+
+public struct RelayHostData {
+    public string joinCode;
+    public string ipv4Address;
+    public ushort port;
+    public Guid allocationID;
+    public byte[] allocationIDBytes;
+    public byte[] connectionData;
+    public byte[] key;
+
+}
+
+
+// Relay Join Data
+
+
+public struct RelayJoinData {
+    public string joinCode;
+    public string ipv4Address;
+    public ushort port;
+    public Guid allocationID;
+    public byte[] allocationIDBytes;
+    public byte[] connectionData;
+    public byte[] hostConnectionData;
+    public byte[] key;
 
 }
