@@ -183,12 +183,28 @@ public class ServerLobby : MonoBehaviour
                 serverMenu.gameObject.SetActive(false);
                 lobbyMenu.gameObject.SetActive(true);
                 InvokeRepeating("PollForLobbyUpdates", 0f, 1.2f);
+                List<string> playerListString = new List<string> ();
+
+                foreach (var player in currentlyConnectedLobby.Players) {
+                    Debug.Log("Player ID: " + player.Id);
+                    playerListString.Add(player.Id+"\n");
+                }
+                lobbyPlayerList.text = string.Join("", playerListString);
+                Debug.Log(lobbyPlayerList.text);
             }
         } else {
             if (currentlyConnectedLobby != null) {
                 serverMenu.gameObject.SetActive(false);
                 lobbyMenu.gameObject.SetActive(true);
                 InvokeRepeating("PollForLobbyUpdates", 0f, 1.2f);
+                List<string> playerListString = new List<string> ();
+
+                foreach (var player in currentlyConnectedLobby.Players) {
+                    Debug.Log("Player ID: " + player.Id);
+                    playerListString.Add(player.Id+"\n");
+                }
+                lobbyPlayerList.text = string.Join("", playerListString);
+                Debug.Log(lobbyPlayerList.text);
             }
         }
     }
@@ -202,9 +218,14 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
+                List<string> playerListString = new List<string> ();
+
                 foreach (var player in currentlyConnectedLobby.Players) {
                     Debug.Log("Player ID: " + player.Id);
+                    playerListString.Add(player.Id+"\n");
                 }
+                lobbyPlayerList.text = string.Join("", playerListString);
+                Debug.Log(lobbyPlayerList.text);
 
             } catch (LobbyServiceException error) {
 
