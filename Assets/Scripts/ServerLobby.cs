@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Authentication;
@@ -40,13 +41,47 @@ public class ServerLobby : MonoBehaviour
     private async void Start() {
         await UnityServices.InitializeAsync();
 
+
+        //Event listeners for user authentication
+        AuthenticationEventListener();
+
+
+        //Login the user Anonymously
+        await AnonymousSignIn();
+
+    }
+
+    void AuthenticationEventListener() {
+
         AuthenticationService.Instance.SignedIn += () => {
+
             playerID = AuthenticationService.Instance.PlayerId;
+
             Debug.Log("logged in as user: " + AuthenticationService.Instance.PlayerId);
+            Debug.Log("User Access Token: " + AuthenticationService.Instance.AccessToken);
+
         };
 
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        AuthenticationService.Instance.SignInFailed += (error) => {
+            Debug.LogError(error);
+        };
 
+        AuthenticationService.Instance.SignedOut += () => {
+            Debug.Log("Signed Out");
+        };
+
+    }
+
+    //Using Task instead of Void since you can't await a void function but can await a task.
+    async Task AnonymousSignIn() {
+        try {
+
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            Debug.Log("Sign in Successful");
+
+        } catch (AuthenticationException error) {
+            Debug.LogException(error);
+        }
     }
 
     async void KeepLobbyAliveWhileHostJoined() {
