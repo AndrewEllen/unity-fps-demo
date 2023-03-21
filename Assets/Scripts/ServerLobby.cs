@@ -97,6 +97,7 @@ public class ServerLobby : MonoBehaviour
         }
     }
 
+    //This function keeps the server alive while the host is in the lobby. Lobbys will be destroyed if the heartbeat is not kept going atleast every 30 seconds.
     async void KeepLobbyAliveWhileHostJoined() {
         if (currentlyConnectedLobby is not null) {
             Debug.Log("HeartBeat sent");
@@ -146,7 +147,7 @@ public class ServerLobby : MonoBehaviour
 
             newLobbyOptions.IsPrivate = !publicServerInput;
 
-            //Lobby Options
+            //Lobby Options. This is syncing up the lobby join code from Relay and Lobby. By Default Lobby uses its own join code.
             newLobbyOptions.Data = new Dictionary<string, DataObject>() {
                 {
                     "joinCode", new DataObject(
