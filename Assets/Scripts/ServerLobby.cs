@@ -33,6 +33,8 @@ public class ServerLobby : MonoBehaviour
     [Header("Lobby Menu")]
     [SerializeField] private GameObject lobbyMenu;
 
+    [SerializeField] private TextMeshProUGUI lobbyPlayerList;
+
 
     private Lobby currentlyConnectedLobby;
     private string playerID;
@@ -98,10 +100,14 @@ public class ServerLobby : MonoBehaviour
             if (currentlyConnectedLobbyUpdate.Players.Count != currentlyConnectedLobby.Players.Count) {
 
                 currentlyConnectedLobby = currentlyConnectedLobbyUpdate;
-        
+                List<string> playerListString = new List<string> ();
+
                 foreach (var player in currentlyConnectedLobby.Players) {
                     Debug.Log("Player ID: " + player.Id);
+                    playerListString.Add(player.Id+"\n");
                 }
+                lobbyPlayerList.text = string.Join("", playerListString);
+                Debug.Log(lobbyPlayerList.text);
             }
         }
     }
@@ -177,9 +183,14 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Public");
                 currentlyConnectedLobby = await LobbyService.Instance.QuickJoinLobbyAsync();
+                List<string> playerListString = new List<string> ();
+
                 foreach (var player in currentlyConnectedLobby.Players) {
                     Debug.Log("Player ID: " + player.Id);
+                    playerListString.Add(player.Id+"\n");
                 }
+                lobbyPlayerList.text = string.Join("", playerListString);
+                Debug.Log(lobbyPlayerList.text);
 
             } catch (LobbyServiceException error) {
 
