@@ -11,6 +11,8 @@ using UnityEngine.UI;
 using System;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 
 public class ServerLobby : MonoBehaviour
 {
@@ -161,9 +163,22 @@ public class ServerLobby : MonoBehaviour
 
             currentlyConnectedLobby = newLobby;
 
+            //Lobby Heartbeat
             InvokeRepeating("KeepLobbyAliveWhileHostJoined", 0f, 15f);
 
             Debug.Log("Lobby Name: "+ newLobby.Name + " Lobby Max Player Count: " + newLobby.MaxPlayers + " with lobby code of: " + newLobby.LobbyCode);
+
+            //Setting Data for the Transports 
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
+                _hostData.ipv4Address,
+                _hostData.port,
+                _hostData.allocationIDBytes,
+                _hostData.key,
+                _hostData.connectionData
+            );
+
+            //Starting Host
+            //NetworkManager.Singleton.StartHost();
 
         } catch (LobbyServiceException error) {
 
@@ -218,6 +233,33 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
+                //Joining the relay allocation after joining the lobby
+                JoinAllocation relayEntryPointAllocation = await Relay.Instance.JoinAllocationAsync(currentlyConnectedLobby.Data["joinCode"].Value);
+
+                //Setting join data for the relay allocation
+                _joinData = new RelayJoinData {
+                    key = relayEntryPointAllocation.Key,
+                    port = (ushort) relayEntryPointAllocation.RelayServer.Port,
+                    allocationID = relayEntryPointAllocation.AllocationId,
+                    allocationIDBytes = relayEntryPointAllocation.AllocationIdBytes,
+                    connectionData = relayEntryPointAllocation.ConnectionData,
+                    hostConnectionData = relayEntryPointAllocation.HostConnectionData,
+                    ipv4Address = relayEntryPointAllocation.RelayServer.IpV4
+                };
+
+                //Setting Data for the Transports 
+                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
+                    _joinData.ipv4Address,
+                    _joinData.port,
+                    _joinData.allocationIDBytes,
+                    _joinData.key,
+                    _joinData.connectionData,
+                    _joinData.hostConnectionData
+                );
+
+                //Starting the client
+                //NetworkManager.Singleton.StartClient();
+
                 List<string> playerListString = new List<string> ();
 
                 foreach (var player in currentlyConnectedLobby.Players) {
