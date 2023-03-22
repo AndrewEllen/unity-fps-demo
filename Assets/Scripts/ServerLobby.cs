@@ -198,6 +198,8 @@ public class ServerLobby : MonoBehaviour
 
     //This function joins the hosts server
     public void JoinHostedServer() {
+        
+        sceneManager.GetComponent<NetworkSceneManager>().OnNetworkSpawn();
         NetworkManager.Singleton.StartClient();
     }
 
