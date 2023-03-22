@@ -39,7 +39,8 @@ public class ServerLobby : MonoBehaviour
     [SerializeField] private GameObject lobbyMenu;
 
     [SerializeField] private TextMeshProUGUI lobbyPlayerList;
-
+    
+    //public UnityEditor.SceneAsset mapScene;
 
     private Lobby currentlyConnectedLobby;
     private string playerID;
@@ -177,15 +178,23 @@ public class ServerLobby : MonoBehaviour
                 _hostData.connectionData
             );
 
-            //Starting Host
-            //NetworkManager.Singleton.StartHost();
-
         } catch (LobbyServiceException error) {
 
             Debug.Log(error);
 
         }
         DisplayLobbyScreen(true);
+    }
+
+    //This function starts hosting the server
+    public void StartHostingRelayServer() {
+        //NetworkManager.Singleton.SceneManager.LoadScene("map01", );
+        NetworkManager.Singleton.StartHost();
+    }
+
+    //This function joins the hosts server
+    public void JoinHostedServer() {
+        NetworkManager.Singleton.StartClient();
     }
 
     public void ChangeMaxPlayerHandleValue() {
@@ -258,7 +267,7 @@ public class ServerLobby : MonoBehaviour
                 );
 
                 //Starting the client
-                //NetworkManager.Singleton.StartClient();
+                //JoinHostedServer();
 
                 List<string> playerListString = new List<string> ();
 
