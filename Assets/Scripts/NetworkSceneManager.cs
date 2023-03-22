@@ -6,6 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class NetworkSceneManager : NetworkBehaviour
 {      
+
+    void Awake() {
+        GameObject.FindGameObjectsWithTag("PersistantObjects");
+        DontDestroyOnLoad(this.gameObject);
+    }
+
   /// INFO: You can remove the #if UNITY_EDITOR code segment and make SceneName public,
   /// but this code assures if the scene name changes you won't have to remember to
   /// manually update it.
@@ -26,7 +32,7 @@ public class NetworkSceneManager : NetworkBehaviour
   {
       if (IsServer && !string.IsNullOrEmpty(m_SceneName))
       {
-          var status = NetworkManager.SceneManager.LoadScene(m_SceneName, LoadSceneMode.Additive);
+          var status = NetworkManager.SceneManager.LoadScene(m_SceneName, LoadSceneMode.Single);
           if (status != SceneEventProgressStatus.Started)
           {
               Debug.LogWarning($"Failed to load {m_SceneName} " +

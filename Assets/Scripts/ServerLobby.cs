@@ -17,6 +17,9 @@ using Unity.Netcode.Transports.UTP;
 public class ServerLobby : MonoBehaviour
 {
 
+    [Header("Network Scene Manager")]
+    [SerializeField] private GameObject sceneManager;
+
     [Header("Server Name Object")]
     [SerializeField] private TMP_InputField serverNameInput;
 
@@ -188,7 +191,8 @@ public class ServerLobby : MonoBehaviour
 
     //This function starts hosting the server
     public void StartHostingRelayServer() {
-        //NetworkManager.Singleton.SceneManager.LoadScene("map01", );
+
+        sceneManager.GetComponent<NetworkSceneManager>().OnNetworkSpawn();
         NetworkManager.Singleton.StartHost();
     }
 

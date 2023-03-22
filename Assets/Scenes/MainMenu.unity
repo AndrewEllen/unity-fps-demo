@@ -5484,7 +5484,7 @@ GameObject:
   - component: {fileID: 1888549073}
   m_Layer: 0
   m_Name: NetworkSceneManager
-  m_TagString: Untagged
+  m_TagString: PersistantObjects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5517,8 +5517,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c162c3c16b88f5b49be5d31cf1f08245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneAsset: {fileID: 0}
-  m_SceneName: 
+  SceneAsset: {fileID: 102900000, guid: 0c51155a0d1ccc945b90407a9a045dfe, type: 3}
+  m_SceneName: map01
 --- !u!4 &1888549075
 Transform:
   m_ObjectHideFlags: 0
@@ -6002,12 +6002,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2082195999}
-  - component: {fileID: 2082196000}
   - component: {fileID: 2082196002}
   - component: {fileID: 2082196003}
+  - component: {fileID: 2082196000}
   m_Layer: 0
   m_Name: NetworkManager
-  m_TagString: Untagged
+  m_TagString: PersistantObjects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6066,6 +6066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9a8a8ec1d7f60843926b72803fb319c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneManager: {fileID: 1888549072}
   serverNameInput: {fileID: 2136390991}
   serverPlayersInput: {fileID: 192878935}
   sliderValueDisplay: {fileID: 213202019}
