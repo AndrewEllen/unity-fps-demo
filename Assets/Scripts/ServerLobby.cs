@@ -131,6 +131,8 @@ public class ServerLobby : MonoBehaviour
     }
 
     public async void CreateNewLobby() {
+        //TODO Relay server shuts down too fast
+
         try {
             //The value inside CreateAllocationAsync is the external connections
             Allocation relayEntryPointAllocation = await Relay.Instance.CreateAllocationAsync(Mathf.RoundToInt(serverPlayersInput.value)-1);
@@ -198,8 +200,20 @@ public class ServerLobby : MonoBehaviour
 
     //This function joins the hosts server
     public void JoinHostedServer() {
-        
+        //TODO fix server joining
+
+        //Setting Data for the Transports 
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
+            _joinData.ipv4Address,
+            _joinData.port,
+            _joinData.allocationIDBytes,
+            _joinData.key,
+            _joinData.connectionData,
+            _joinData.hostConnectionData
+        );
+
         sceneManager.GetComponent<NetworkSceneManager>().OnNetworkSpawn();
+
         NetworkManager.Singleton.StartClient();
     }
 
@@ -261,19 +275,6 @@ public class ServerLobby : MonoBehaviour
                     hostConnectionData = relayEntryPointAllocation.HostConnectionData,
                     ipv4Address = relayEntryPointAllocation.RelayServer.IpV4
                 };
-
-                //Setting Data for the Transports 
-                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
-                    _joinData.ipv4Address,
-                    _joinData.port,
-                    _joinData.allocationIDBytes,
-                    _joinData.key,
-                    _joinData.connectionData,
-                    _joinData.hostConnectionData
-                );
-
-                //Starting the client
-                //JoinHostedServer();
 
                 List<string> playerListString = new List<string> ();
 
