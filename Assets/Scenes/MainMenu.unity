@@ -4096,7 +4096,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2082196002}
         m_TargetAssemblyTypeName: ServerLobby, Assembly-CSharp
-        m_MethodName: StartHostingRelayServer
+        m_MethodName: StartGameClient
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
