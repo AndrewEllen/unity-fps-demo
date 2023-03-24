@@ -13,6 +13,7 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using UnityEngine.Networking;
 
 public class ServerLobby : MonoBehaviour
 {
@@ -199,22 +200,24 @@ public class ServerLobby : MonoBehaviour
     }
 
     //This function joins the hosts server
-    public void JoinHostedServer() {
+    public void JoinServerAsClient() {
         //TODO fix server joining
-
-        //Setting Data for the Transports 
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
-            _joinData.ipv4Address,
-            _joinData.port,
-            _joinData.allocationIDBytes,
-            _joinData.key,
-            _joinData.connectionData,
-            _joinData.hostConnectionData
-        );
 
         sceneManager.GetComponent<NetworkSceneManager>().OnNetworkSpawn();
 
         NetworkManager.Singleton.StartClient();
+    }
+
+    public void OnStartHost() {
+        JoinServerAsClient();
+    }
+
+    public void StartGameClient() {
+        if (currentlyConnectedLobby.HostId == playerID && NetworkManager.Singleton.IsHost) {
+            StartHostingRelayServer();
+        } else {
+            Debug.Log("Non Functional Button");
+        }
     }
 
     public void ChangeMaxPlayerHandleValue() {
@@ -249,6 +252,16 @@ public class ServerLobby : MonoBehaviour
                 }
                 lobbyPlayerList.text = string.Join("", playerListString);
                 Debug.Log(lobbyPlayerList.text);
+
+                        //Setting Data for the Transports 
+                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
+                    _joinData.ipv4Address,
+                    _joinData.port,
+                    _joinData.allocationIDBytes,
+                    _joinData.key,
+                    _joinData.connectionData,
+                    _joinData.hostConnectionData
+                );
             }
         }
     }
