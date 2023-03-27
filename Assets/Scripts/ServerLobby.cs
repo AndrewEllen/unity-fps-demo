@@ -213,10 +213,10 @@ public class ServerLobby : MonoBehaviour
     }
 
     public void StartGameClient() {
-        if (currentlyConnectedLobby.HostId == playerID && NetworkManager.Singleton.IsHost) {
+        if (currentlyConnectedLobby.HostId == playerID) {
             StartHostingRelayServer();
         } else {
-            Debug.Log("Non Functional Button");
+            JoinServerAsClient();
         }
     }
 
@@ -224,7 +224,7 @@ public class ServerLobby : MonoBehaviour
         sliderValueDisplay.text = Mathf.RoundToInt(serverPlayersInput.value).ToString();
     }
 
-    public void DisplayLobbyScreen(bool _creatingServer) {
+    public async void DisplayLobbyScreen(bool _creatingServer) {
         if (_creatingServer) {
             if (currentlyConnectedLobby != null) {
                 serverMenu.gameObject.SetActive(false);
@@ -253,7 +253,25 @@ public class ServerLobby : MonoBehaviour
                 lobbyPlayerList.text = string.Join("", playerListString);
                 Debug.Log(lobbyPlayerList.text);
 
-                        //Setting Data for the Transports 
+
+                //Joining the relay allocation after joining the lobby
+                JoinAllocation relayEntryPointAllocation = await Relay.Instance.JoinAllocationAsync(currentlyConnectedLobby.Data["joinCode"].Value);
+
+                //Setting join data for the relay allocation
+                _joinData = new RelayJoinData {
+                    key = relayEntryPointAllocation.Key,
+                    port = (ushort) relayEntryPointAllocation.RelayServer.Port,
+                    allocationID = relayEntryPointAllocation.AllocationId,
+                    allocationIDBytes = relayEntryPointAllocation.AllocationIdBytes,
+                    connectionData = relayEntryPointAllocation.ConnectionData,
+                    hostConnectionData = relayEntryPointAllocation.HostConnectionData,
+                    ipv4Address = relayEntryPointAllocation.RelayServer.IpV4
+                };
+
+                //Setting Data for the Transports 
+
+                Debug.Log("Setting Transports");
+                
                 NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
                     _joinData.ipv4Address,
                     _joinData.port,
@@ -275,19 +293,6 @@ public class ServerLobby : MonoBehaviour
 
                 Debug.Log("Private");
                 currentlyConnectedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(serverCodeInput.text);
-                //Joining the relay allocation after joining the lobby
-                JoinAllocation relayEntryPointAllocation = await Relay.Instance.JoinAllocationAsync(currentlyConnectedLobby.Data["joinCode"].Value);
-
-                //Setting join data for the relay allocation
-                _joinData = new RelayJoinData {
-                    key = relayEntryPointAllocation.Key,
-                    port = (ushort) relayEntryPointAllocation.RelayServer.Port,
-                    allocationID = relayEntryPointAllocation.AllocationId,
-                    allocationIDBytes = relayEntryPointAllocation.AllocationIdBytes,
-                    connectionData = relayEntryPointAllocation.ConnectionData,
-                    hostConnectionData = relayEntryPointAllocation.HostConnectionData,
-                    ipv4Address = relayEntryPointAllocation.RelayServer.IpV4
-                };
 
                 List<string> playerListString = new List<string> ();
 
