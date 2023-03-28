@@ -21,17 +21,20 @@ public class PlayerControllerScript : NetworkBehaviour
 
     [SerializeField] private Transform cameraTransform;
 
+    [SerializeField] private float mass;
+
+    private PhysicsConstants physics;
     private CharacterController characterController;
     private PlayerControls playerControls;
     public Transform groundCheck;
 
     private float cameraAngle;
-    public float gravity = -9.81f;
+    
     public float jumpHeight = 3f;
     public float groundDis = 0.4f;
     public LayerMask groundLayerMask;
     bool isGrounded;
-    Vector3 velocity;
+    Vector3 jumpVelocityVector;
     [SerializeField] private float MovementSpeed = 2.0f;
 
 
@@ -64,6 +67,8 @@ public class PlayerControllerScript : NetworkBehaviour
         playerControls = new PlayerControls();
         playerControls.Enable();
 
+        physics = new PhysicsConstants();
+
         Cursor.lockState = CursorLockMode.Locked;
 
     }
@@ -72,27 +77,22 @@ public class PlayerControllerScript : NetworkBehaviour
     void Update() {
 
         Vector3 movementInput = playerControls.Player.Move.ReadValue<Vector3>();
+        bool playerJump = playerControls.Player.Jump.triggered;
         Vector2 playerLookInput2D = playerControls.Player.Look.ReadValue<Vector2>();
-
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDis, groundLayerMask);
 
         if (IsServer && IsLocalPlayer) {
             
-            MoveServerRPC(movementInput, playerLookInput2D);
+            MovePlayer(movementInput);
+            JumpPlayer(playerJump);
             RotatePlayer(playerLookInput2D);  
             RotateCameraOnClient(playerLookInput2D);
 
 
         } else if (IsLocalPlayer) {
             
-            MovePlayer(movementInput);
-            RotatePlayer(playerLookInput2D);           
+            MoveServerRPC(movementInput, playerLookInput2D, playerJump);
+            RotateCameraOnClient(playerLookInput2D);     
 
-        }
-
-        if (isGrounded & velocity.y < 0)
-        {
-            velocity.y = -2f;
         }
         
     }
@@ -118,26 +118,42 @@ public class PlayerControllerScript : NetworkBehaviour
 
     }
 
+    private void JumpPlayer(bool jumpInput) {
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDis, groundLayerMask);
+
+        if (isGrounded) {
+
+            if (jumpInput) {
+
+                Debug.Log("Jumping");
+
+                jumpVelocityVector.y = jumpHeight * 2;
+
+            }
+
+        } else {
+            jumpVelocityVector.y = physics.objectGravity(mass, jumpVelocityVector.y, transform.localScale.x, transform.localScale.z, true);
+        }
+
+        characterController.Move(jumpVelocityVector * Time.deltaTime);
+
+    }
+
     private void MovePlayer(Vector3 movementInput) {
 
         Vector3 move = transform.right * movementInput.x + transform.forward * movementInput.z;
         
         characterController.Move(move * MovementSpeed * Time.deltaTime);
 
-        if (playerControls.Player.Jump.triggered && isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-        velocity.y += gravity * Time.deltaTime;
-
-        characterController.Move(velocity * Time.deltaTime);
 
     }
 
     [ServerRpc]
-    private void MoveServerRPC(Vector3 movementInput, Vector2 rotationInput) {
+    private void MoveServerRPC(Vector3 movementInput, Vector2 rotationInput, bool jumpInput) {
 
         MovePlayer(movementInput);
+        JumpPlayer(jumpInput);
         RotatePlayer(rotationInput);
 
     }

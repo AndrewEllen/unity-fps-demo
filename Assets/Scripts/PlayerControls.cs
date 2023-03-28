@@ -47,7 +47,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Fire"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""8f856991-f5f8-4906-b316-8f9a248d95f8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -56,7 +56,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Jump"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""69a41ca8-1ae5-460a-9d27-98aebac83394"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

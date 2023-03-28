@@ -260,7 +260,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2148572203237150054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5403042, y: -4.6398225, z: -4.5060835}
+  m_LocalPosition: {x: 1.5403042, y: -3.45, z: -4.5060835}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -328,8 +328,8 @@ MonoBehaviour:
   playerRotationSpeed: 10
   minMaxRotationOnXAxis: {x: 90, y: -90}
   cameraTransform: {fileID: 6255316107160134841}
+  mass: 60
   groundCheck: {fileID: 8379956782002616462}
-  gravity: -9.81
   jumpHeight: 3
   groundDis: 0.4
   groundLayerMask:
@@ -516,7 +516,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8894620842746919219}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
