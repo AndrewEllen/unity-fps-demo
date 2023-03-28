@@ -21,11 +21,27 @@ public class PlayerControllerScript : NetworkBehaviour
 
     [SerializeField] private Transform cameraTransform;
 
-
     private CharacterController characterController;
     private PlayerControls playerControls;
+    public Transform groundCheck;
 
     private float cameraAngle;
+    public float gravity = -9.81f;
+    public float jumpHeight = 3f;
+    public float groundDis = 0.4f;
+    public LayerMask groundLayerMask;
+    bool isGrounded;
+    Vector3 velocity;
+    [SerializeField] private float MovementSpeed = 2.0f;
+
+
+
+
+
+
+
+
+
 
 
     public override void OnNetworkSpawn() {
@@ -55,16 +71,28 @@ public class PlayerControllerScript : NetworkBehaviour
 
     void Update() {
 
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDis, groundLayerMask);
+
+        if (isGrounded & velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
+
         if (IsLocalPlayer) {
-            
+
             if (playerControls.Player.Move.inProgress) {
 
-                Vector2 playerMovementInput2D = playerControls.Player.Move.ReadValue<Vector2>();
-                Vector3 playerMovement3D = playerMovementInput2D.x * cameraTransform.right + playerMovementInput2D.y * cameraTransform.forward;
+                Vector3 move = transform.right * playerControls.Player.Move.ReadValue<Vector3>().x + transform.forward * playerControls.Player.Move.ReadValue<Vector3>().z;
+                characterController.Move(move * MovementSpeed * Time.deltaTime);
 
-                playerMovement3D.y = 0;
+                if (playerControls.Player.Jump.triggered && isGrounded)
+                {
+                    velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                }
+                velocity.y += gravity * Time.deltaTime;
 
-                characterController.Move(playerMovement3D * playerSpeed * Time.deltaTime);
+                characterController.Move(velocity * Time.deltaTime);
 
             }
 

@@ -328,6 +328,14 @@ MonoBehaviour:
   playerRotationSpeed: 10
   minMaxRotationOnXAxis: {x: 90, y: -90}
   cameraTransform: {fileID: 6255316107160134841}
+  groundCheck: {fileID: 8379956782002616462}
+  gravity: -9.81
+  jumpHeight: 3
+  groundDis: 0.4
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  MovementSpeed: 2
 --- !u!114 &906868127383573600
 MonoBehaviour:
   m_ObjectHideFlags: 0
