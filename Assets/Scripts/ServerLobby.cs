@@ -199,24 +199,15 @@ public class ServerLobby : MonoBehaviour
         NetworkManager.Singleton.StartHost();
     }
 
-    //This function joins the hosts server
-    public void JoinServerAsClient() {
-        //TODO fix server joining
-
-        sceneManager.GetComponent<NetworkSceneManager>().OnNetworkSpawn();
-
-        NetworkManager.Singleton.StartClient();
-    }
-
     public void OnStartHost() {
-        JoinServerAsClient();
+        sceneManager.GetComponent<NetworkSceneManager>().OnNetworkSpawn();
     }
 
     public void StartGameClient() {
         if (currentlyConnectedLobby.HostId == playerID) {
             StartHostingRelayServer();
         } else {
-            JoinServerAsClient();
+            Debug.Log("remove the button, does nothing as client");
         }
     }
 
@@ -280,6 +271,11 @@ public class ServerLobby : MonoBehaviour
                     _joinData.connectionData,
                     _joinData.hostConnectionData
                 );
+
+
+                //Starting Client
+                NetworkManager.Singleton.StartClient();
+                
             }
         }
     }
