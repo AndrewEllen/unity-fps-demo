@@ -123,16 +123,16 @@ public class PlayerControllerScript : NetworkBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDis, groundLayerMask);
 
         if (isGrounded) {
-
+            jumpVelocityVector.y = 0;
             if (jumpInput) {
 
                 Debug.Log("Jumping");
 
-                jumpVelocityVector.y = jumpHeight * 2;
-
+                jumpVelocityVector.y = jumpHeight;
             }
 
         } else {
+            //Feels weird because it should be increasing by -9.81ms but its every tick
             jumpVelocityVector.y = physics.objectGravity(mass, jumpVelocityVector.y, transform.localScale.x, transform.localScale.z, true);
         }
 
