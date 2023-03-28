@@ -674,12 +674,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11e88d101010ba49b4111e57f221710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionAsset: {fileID: -944628639613478452, guid: 34d0426c34ce021488ef9a4e928fc299, type: 3}
-  myBullet: {fileID: 0}
+  actionAsset: {fileID: -944628639613478452, guid: 8a2bdc87bf69cb945b0eafce975fe17f, type: 3}
+  myBullet: {fileID: 3648877568765068336, guid: acc22ae8819abe24b831df23a01346b1, type: 3}
   bulletInfo: {fileID: 11400000, guid: 803daf1e96ff35a49b5106b46c1e4ff1, type: 2}
   myBulletSpawnTransform: {fileID: 8197809548126449576}
   myPower: 500
-  myPlayer: {fileID: 0}
+  myPlayer: {fileID: 2148572203237150054}
 --- !u!4 &8197809548126449576 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2262060228744711401, guid: 3d9b0e1eb2f87d443b9becc623247182, type: 3}
