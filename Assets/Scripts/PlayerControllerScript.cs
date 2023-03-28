@@ -71,57 +71,74 @@ public class PlayerControllerScript : NetworkBehaviour
 
     void Update() {
 
+        Vector3 movementInput = playerControls.Player.Move.ReadValue<Vector3>();
+        Vector2 playerLookInput2D = playerControls.Player.Look.ReadValue<Vector2>();
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDis, groundLayerMask);
+
+        if (IsServer && IsLocalPlayer) {
+            
+            MoveServerRPC(movementInput, playerLookInput2D);
+            RotatePlayer(playerLookInput2D);  
+            RotateCameraOnClient(playerLookInput2D);
+
+
+        } else if (IsLocalPlayer) {
+            
+            MovePlayer(movementInput);
+            RotatePlayer(playerLookInput2D);           
+
+        }
 
         if (isGrounded & velocity.y < 0)
         {
             velocity.y = -2f;
         }
-
-
-        if (IsLocalPlayer) {
-
-            if (playerControls.Player.Move.inProgress) {
-
-                Vector3 move = transform.right * playerControls.Player.Move.ReadValue<Vector3>().x + transform.forward * playerControls.Player.Move.ReadValue<Vector3>().z;
-                characterController.Move(move * MovementSpeed * Time.deltaTime);
-
-                if (playerControls.Player.Jump.triggered && isGrounded)
-                {
-                    velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-                }
-                velocity.y += gravity * Time.deltaTime;
-
-                characterController.Move(velocity * Time.deltaTime);
-
-            }
-
-            if (playerControls.Player.Look.inProgress) {
-
-                Vector2 playerLookInput2D = playerControls.Player.Look.ReadValue<Vector2>();
-                
-                transform.RotateAround(transform.position, transform.up, playerLookInput2D.x * playerRotationSpeed * Time.deltaTime);
-                
-                RotateCamera(playerLookInput2D.y);
-                
-            }
-
-        }
         
     }
 
-    private void RotateCamera(float inputYAxis) {
+    private void RotatePlayer(Vector2 rotationInput) {
+
+        transform.RotateAround(transform.position, transform.up, rotationInput.x * playerRotationSpeed * Time.deltaTime);
+
+    }
+
+    private void RotateCameraOnClient(Vector2 rotationInput) {
 
         cameraAngle = Vector3.SignedAngle(transform.forward, cameraTransform.forward, cameraTransform.right);
 
-        float cameraRotationAmount = inputYAxis * playerRotationSpeed * Time.deltaTime;
+        float cameraRotationAmount = rotationInput.y * playerRotationSpeed * Time.deltaTime;
         float newCameraAngle = cameraAngle - cameraRotationAmount;
 
         if (newCameraAngle <= minMaxRotationOnXAxis.x && newCameraAngle >= minMaxRotationOnXAxis.y) {
 
-            cameraTransform.RotateAround(cameraTransform.position, cameraTransform.right, -inputYAxis * playerRotationSpeed * Time.deltaTime);
+            cameraTransform.RotateAround(cameraTransform.position, cameraTransform.right, -rotationInput.y * playerRotationSpeed * Time.deltaTime);
 
         }
+
+    }
+
+    private void MovePlayer(Vector3 movementInput) {
+
+        Vector3 move = transform.right * movementInput.x + transform.forward * movementInput.z;
+        
+        characterController.Move(move * MovementSpeed * Time.deltaTime);
+
+        if (playerControls.Player.Jump.triggered && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+        velocity.y += gravity * Time.deltaTime;
+
+        characterController.Move(velocity * Time.deltaTime);
+
+    }
+
+    [ServerRpc]
+    private void MoveServerRPC(Vector3 movementInput, Vector2 rotationInput) {
+
+        MovePlayer(movementInput);
+        RotatePlayer(rotationInput);
 
     }
 
