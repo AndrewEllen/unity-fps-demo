@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2496820384450796868}
   m_Layer: 0
-  m_Name: CameraObjects
+  m_Name: CameraSocketObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,7 +335,6 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  MovementSpeed: 2
 --- !u!114 &906868127383573600
 MonoBehaviour:
   m_ObjectHideFlags: 0
