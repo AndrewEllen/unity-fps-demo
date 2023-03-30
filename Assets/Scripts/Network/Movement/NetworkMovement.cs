@@ -54,9 +54,73 @@ public class NetworkMovement : NetworkBehaviour {
             int bufferIndex = tick % BUFFER_SIZE;
 
             if (!IsServer) {
+
                 MovePlayerServerRPC(tick, movementInput, cameraInput);
+                MovePlayer(movementInput);
+                RotatePlayer(cameraInput);
+
+            } else {
+
+                MovePlayer(movementInput);
+                RotatePlayer(cameraInput);
+
+                TransformState state = new TransformState() {
+
+                    tickState = tick,
+                    positionState = transform.position,
+                    rotationState = transform.rotation,
+                    hasStartedMovingState = true
+
+                };
+
+                previousTransformState = serverTransformState.Value;
+                serverTransformState.Value = state;
+
             }
+
+            InputState inputState = new InputState() {
+                
+                tickState = tick,
+                movementInputState = movementInput,
+                cameraInputState = cameraInput,
+
+            };
+
+            TransformState transformState = new TransformState() {
+
+                tickState = tick,
+                positionState = transform.position,
+                rotationState = transform.rotation,
+                hasStartedMovingState = true
+
+            };
+
+            inputStates[bufferIndex] = inputState;
+            transformStates[bufferIndex] = transformState;
+
+            tickDeltaTime -= tickRate;
+            tick++;
             
+        }
+
+    }
+
+    public void ProcessSimulatedPlayerMovement() {
+
+        tickDeltaTime += Time.deltaTime;
+        
+        if (tickDeltaTime > tickRate) {
+            
+            if (serverTransformState.Value.hasStartedMovingState) {
+
+                transform.position = serverTransformState.Value.positionState;
+                transform.rotation = serverTransformState.Value.rotationState;
+
+            }
+
+            tickDeltaTime -= tickRate;
+            tick++;
+
         }
 
     }
@@ -83,8 +147,22 @@ public class NetworkMovement : NetworkBehaviour {
     [ServerRpc]
     private void MovePlayerServerRPC(int tick, Vector3 movementInput, Vector2 cameraInput) {
 
+        //Can put testing here for server packets lost. Do this by testing previous tick number
+
         MovePlayer(movementInput);
         RotatePlayer(cameraInput);
+
+        TransformState state = new TransformState() {
+
+            tickState = tick,
+            positionState = transform.position,
+            rotationState = transform.rotation,
+            hasStartedMovingState = true,
+
+        };
+
+        previousTransformState = serverTransformState.Value;
+        serverTransformState.Value = state;
 
     }
 

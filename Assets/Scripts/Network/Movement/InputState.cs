@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class InputState {
 
-    public int tick;
-    public Vector3 movementInput;
-    public Vector2 cameraInput;
+    public int tickState;
+    public Vector3 movementInputState;
+    public Vector2 cameraInputState;
 
 }

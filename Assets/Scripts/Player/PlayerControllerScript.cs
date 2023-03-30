@@ -13,13 +13,9 @@ using Cinemachine;
 public class PlayerControllerScript : NetworkBehaviour
 {
 
-    [SerializeField] private float playerSpeed;
-
-    [SerializeField] private float playerRotationSpeed;
-
     [SerializeField] private Vector2 minMaxRotationOnXAxis;
-
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private NetworkMovement playerMovement;
 
     [SerializeField] private float mass;
 
@@ -70,23 +66,19 @@ public class PlayerControllerScript : NetworkBehaviour
         bool playerJump = playerControls.Player.Jump.triggered;
         Vector2 playerLookInput2D = playerControls.Player.Look.ReadValue<Vector2>();
 
-        if (IsServer && IsLocalPlayer) {
+        if (IsClient && IsLocalPlayer) {
             
-            MovePlayer(movementInput);
-            JumpPlayer(playerJump);
-            RotatePlayer(playerLookInput2D);  
-            RotateCameraOnClient(playerLookInput2D);
+            playerMovement.ProcessLocalPlayerMovement(movementInput, playerLookInput2D);
 
-
-        } else if (IsLocalPlayer) {
+        } else {
             
-            MoveServerRPC(movementInput, playerLookInput2D, playerJump);
-            RotateCameraOnClient(playerLookInput2D);     
+            playerMovement.ProcessSimulatedPlayerMovement();  
 
         }
         
     }
 
+/*
     private void RotatePlayer(Vector2 rotationInput) {
 
         transform.RotateAround(transform.position, transform.up, rotationInput.x * playerRotationSpeed * Time.deltaTime);
@@ -146,5 +138,6 @@ public class PlayerControllerScript : NetworkBehaviour
         RotatePlayer(rotationInput);
 
     }
+*/
 
 }
