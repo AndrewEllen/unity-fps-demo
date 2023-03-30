@@ -4,7 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PersistantObjects
+  - Enemy
+  - Body
+  - Head
+  - Arm
+  - Leg
+  - Hand
+  - Foot
+  - UpperTorso
+  - LowerTorso
+  - Neck
   layers:
   - Default
   - TransparentFX
