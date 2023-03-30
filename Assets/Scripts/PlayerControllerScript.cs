@@ -35,16 +35,6 @@ public class PlayerControllerScript : NetworkBehaviour
     public LayerMask groundLayerMask;
     bool isGrounded;
     Vector3 jumpVelocityVector;
-    [SerializeField] private float MovementSpeed = 2.0f;
-
-
-
-
-
-
-
-
-
 
 
     public override void OnNetworkSpawn() {
@@ -132,7 +122,6 @@ public class PlayerControllerScript : NetworkBehaviour
             }
 
         } else {
-            //Feels weird because it should be increasing by -9.81ms but its every tick
             jumpVelocityVector.y = physics.objectGravity(mass, jumpVelocityVector.y, transform.localScale.x, transform.localScale.z, true);
         }
 
@@ -144,7 +133,7 @@ public class PlayerControllerScript : NetworkBehaviour
 
         Vector3 move = transform.right * movementInput.x + transform.forward * movementInput.z;
         
-        characterController.Move(move * MovementSpeed * Time.deltaTime);
+        characterController.Move(move * playerSpeed * Time.deltaTime);
 
 
     }

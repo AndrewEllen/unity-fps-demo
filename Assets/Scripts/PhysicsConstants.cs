@@ -39,8 +39,6 @@ public class PhysicsConstants : MonoBehaviour
 
         termVelocity = Mathf.Sqrt((2 * mass * gravity)/(atmosphericDensity * area * dragC));
 
-        Debug.Log("Terminal V:" + termVelocity);
-
         return termVelocity;
     }
 
@@ -49,8 +47,6 @@ public class PhysicsConstants : MonoBehaviour
         float drag;
 
         drag = (dragC * ((atmosphericDensity * Mathf.Pow(velocity, 2))/2) * area);
-
-        Debug.Log("Drag: " + drag);
 
         return drag;
 
@@ -66,11 +62,8 @@ public class PhysicsConstants : MonoBehaviour
 
         if (-currentVelocity < termVelocity) {
 
-            objectAcceleration = -(((mass*gravity)-dragForce(mass, area, dragC, currentVelocity))/mass);
-            Debug.Log("Acceleration:" + objectAcceleration);
-
+            objectAcceleration = -((((mass*gravity)-dragForce(mass, area, dragC, currentVelocity))/mass)*Time.deltaTime);
             newObjectVelocity = currentVelocity + objectAcceleration;
-            Debug.Log("New velocity:" + newObjectVelocity);
 
             return newObjectVelocity;
         }
