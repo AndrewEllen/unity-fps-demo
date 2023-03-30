@@ -13,6 +13,7 @@ public class NetworkMovement : NetworkBehaviour {
     [SerializeField] private float playerRotationSpeed;
     [SerializeField] private Transform cameraSocketObject;
     [SerializeField] private GameObject virtualCamera;
+    [SerializeField] private Vector2 cameraMinAndMaxAngle;
     [SerializeField] private float mass;
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private Vector3 jumpVelocityVector;
@@ -29,6 +30,19 @@ public class NetworkMovement : NetworkBehaviour {
 
     public NetworkVariable<TransformState> serverTransformState = new NetworkVariable<TransformState>();
     public TransformState previousTransformState;
+
+
+
+    [SerializeField] private GameObject my_Body;
+    CharacterController characterController;
+    [SerializeField] float LRmouseSensitivity = 0.1f;
+    [SerializeField] float UDmouseSensitivty = 0.1f;
+    float UDRotation = 0f;
+
+
+
+
+
     
     private void OnEnable() {
         
@@ -144,7 +158,7 @@ public class NetworkMovement : NetworkBehaviour {
     private void JumpPlayer(bool jumpInput) {
 
         if (playerCharacterController.isGrounded) {
-            jumpVelocityVector.y = 0;
+            jumpVelocityVector.y = -9.81f;
             if (jumpInput) {
 
                 Debug.Log("Jumping");
@@ -161,9 +175,20 @@ public class NetworkMovement : NetworkBehaviour {
     }
 
     private void RotatePlayer(Vector2 cameraInput) {
-        
-        virtualCameraTransform.RotateAround(virtualCameraTransform.position, virtualCameraTransform.right, -cameraInput.y * playerRotationSpeed * tickRate);
-        transform.RotateAround(transform.position, transform.up, cameraInput.x * playerRotationSpeed * tickRate);
+
+        Vector3 m_LRRotationInput = new Vector3(0, cameraInput.x, 0);
+
+
+        Vector3 m_UDRotationInput = new Vector3(cameraInput.y, 0, 0);
+        UDRotation -= m_UDRotationInput.x * playerRotationSpeed;
+        UDRotation = Mathf.Clamp(UDRotation, -90f, 90f);
+
+        virtualCameraTransform.localRotation = Quaternion.Euler(UDRotation, 0f, 0f);
+
+        transform.Rotate(m_LRRotationInput * playerRotationSpeed);
+
+        //virtualCameraTransform.RotateAround(virtualCameraTransform.position, virtualCameraTransform.right, -cameraInput.y * playerRotationSpeed * tickRate);
+        //transform.RotateAround(transform.position, transform.up, cameraInput.x * playerRotationSpeed * tickRate);
 
     }
 

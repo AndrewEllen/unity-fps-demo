@@ -334,12 +334,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCharacterController: {fileID: 6288316731675887373}
-  playerSpeed: 10
-  playerRotationSpeed: 10
+  playerSpeed: 5
+  playerRotationSpeed: 1
   cameraSocketObject: {fileID: 2496820384450796868}
   virtualCamera: {fileID: 1121553101377833438}
+  cameraMinAndMaxAngle: {x: 90, y: -90}
   mass: 60
   jumpHeight: 5
+  jumpVelocityVector: {x: 0, y: 0, z: 0}
+  my_Body: {fileID: 0}
+  LRmouseSensitivity: 0.1
+  UDmouseSensitivty: 0.1
 --- !u!1 &6554564312820579637
 GameObject:
   m_ObjectHideFlags: 0
