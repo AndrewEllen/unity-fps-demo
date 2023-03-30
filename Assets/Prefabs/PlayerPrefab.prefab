@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &107992500430738346
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8379956782002616462}
-  m_Layer: 0
-  m_Name: GroundChecker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8379956782002616462
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107992500430738346}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8450549975617311684}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &205357117511462874
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,6 +214,7 @@ GameObject:
   - component: {fileID: 8702550567114951091}
   - component: {fileID: 7658748260538071844}
   - component: {fileID: 906868127383573600}
+  - component: {fileID: 8572970059359014176}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -260,12 +230,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2148572203237150054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5403042, y: -3.45, z: -4.5060835}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6264752469228293123}
-  - {fileID: 8379956782002616462}
   - {fileID: 2496820384450796868}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -289,12 +258,12 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 0
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8702550567114951091
 MonoBehaviour:
@@ -324,17 +293,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37867889228d6c4ca4c9ff86750676d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 10
-  playerRotationSpeed: 10
-  minMaxRotationOnXAxis: {x: 90, y: -90}
   cameraTransform: {fileID: 6255316107160134841}
-  mass: 60
-  groundCheck: {fileID: 8379956782002616462}
-  jumpHeight: 3
-  groundDis: 0.4
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
+  playerMovement: {fileID: 8572970059359014176}
 --- !u!114 &906868127383573600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +321,25 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
+--- !u!114 &8572970059359014176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2148572203237150054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3543b02b9cec334999ba17ce6e4821e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCharacterController: {fileID: 6288316731675887373}
+  playerSpeed: 10
+  playerRotationSpeed: 10
+  cameraSocketObject: {fileID: 2496820384450796868}
+  virtualCamera: {fileID: 1121553101377833438}
+  mass: 60
+  jumpHeight: 5
 --- !u!1 &6554564312820579637
 GameObject:
   m_ObjectHideFlags: 0

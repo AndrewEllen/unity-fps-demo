@@ -13,24 +13,9 @@ using Cinemachine;
 public class PlayerControllerScript : NetworkBehaviour
 {
 
-    [SerializeField] private Vector2 minMaxRotationOnXAxis;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private NetworkMovement playerMovement;
-
-    [SerializeField] private float mass;
-
-    private PhysicsConstants physics;
-    private CharacterController characterController;
-    private PlayerControls playerControls;
-    public Transform groundCheck;
-
-    private float cameraAngle;
-    
-    public float jumpHeight = 3f;
-    public float groundDis = 0.4f;
-    public LayerMask groundLayerMask;
-    bool isGrounded;
-    Vector3 jumpVelocityVector;
+    private PlayerControls playerControls;    
 
 
     public override void OnNetworkSpawn() {
@@ -48,12 +33,8 @@ public class PlayerControllerScript : NetworkBehaviour
 
     void Start() {
         
-        characterController = GetComponent<CharacterController>();
-
         playerControls = new PlayerControls();
         playerControls.Enable();
-
-        physics = new PhysicsConstants();
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -63,12 +44,12 @@ public class PlayerControllerScript : NetworkBehaviour
     void Update() {
 
         Vector3 movementInput = playerControls.Player.Move.ReadValue<Vector3>();
-        bool playerJump = playerControls.Player.Jump.triggered;
+        bool playerJumpInput = playerControls.Player.Jump.triggered;
         Vector2 playerLookInput2D = playerControls.Player.Look.ReadValue<Vector2>();
 
         if (IsClient && IsLocalPlayer) {
             
-            playerMovement.ProcessLocalPlayerMovement(movementInput, playerLookInput2D);
+            playerMovement.ProcessLocalPlayerMovement(movementInput, playerJumpInput, playerLookInput2D);
 
         } else {
             

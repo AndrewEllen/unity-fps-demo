@@ -13,6 +13,10 @@ public class NetworkMovement : NetworkBehaviour {
     [SerializeField] private float playerRotationSpeed;
     [SerializeField] private Transform cameraSocketObject;
     [SerializeField] private GameObject virtualCamera;
+    [SerializeField] private float mass;
+    [SerializeField] private float jumpHeight = 3f;
+    [SerializeField] private Vector3 jumpVelocityVector;
+    private PhysicsConstants physics;
 
     private Transform virtualCameraTransform;
     private int tick = 0;
@@ -34,6 +38,8 @@ public class NetworkMovement : NetworkBehaviour {
 
     public override void OnNetworkSpawn() {
 
+        physics = new PhysicsConstants();
+
         base.OnNetworkSpawn();
         virtualCameraTransform = virtualCamera.transform;
 
@@ -46,7 +52,7 @@ public class NetworkMovement : NetworkBehaviour {
 
     }
 
-    public void ProcessLocalPlayerMovement(Vector3 movementInput, Vector2 cameraInput) {
+    public void ProcessLocalPlayerMovement(Vector3 movementInput, bool playerJumpInput, Vector2 cameraInput) {
 
         tickDeltaTime += Time.deltaTime;
         if (tickDeltaTime > tickRate) {
@@ -55,13 +61,15 @@ public class NetworkMovement : NetworkBehaviour {
 
             if (!IsServer) {
 
-                MovePlayerServerRPC(tick, movementInput, cameraInput);
+                MovePlayerServerRPC(tick, movementInput, playerJumpInput, cameraInput);
                 MovePlayer(movementInput);
+                JumpPlayer(playerJumpInput);
                 RotatePlayer(cameraInput);
 
             } else {
 
                 MovePlayer(movementInput);
+                JumpPlayer(playerJumpInput);
                 RotatePlayer(cameraInput);
 
                 TransformState state = new TransformState() {
@@ -128,12 +136,27 @@ public class NetworkMovement : NetworkBehaviour {
     private void MovePlayer(Vector3 movementInput) {
 
         Vector3 playerMovement = virtualCameraTransform.right * movementInput.x + virtualCameraTransform.forward * movementInput.z;
-
-        if (!playerCharacterController.isGrounded) {
-            playerMovement.y = -9.81f;
-        }
         
         playerCharacterController.Move(playerMovement * playerSpeed * tickRate);
+
+    }
+
+    private void JumpPlayer(bool jumpInput) {
+
+        if (playerCharacterController.isGrounded) {
+            jumpVelocityVector.y = 0;
+            if (jumpInput) {
+
+                Debug.Log("Jumping");
+
+                jumpVelocityVector.y = jumpHeight;
+            }
+
+        } else {
+            jumpVelocityVector.y = physics.objectGravity(mass, jumpVelocityVector.y, transform.localScale.x, transform.localScale.z, true, true, tickRate);
+        }
+
+        playerCharacterController.Move(jumpVelocityVector * tickRate);
 
     }
 
@@ -145,11 +168,12 @@ public class NetworkMovement : NetworkBehaviour {
     }
 
     [ServerRpc]
-    private void MovePlayerServerRPC(int tick, Vector3 movementInput, Vector2 cameraInput) {
+    private void MovePlayerServerRPC(int tick, Vector3 movementInput, bool playerJumpInput, Vector2 cameraInput) {
 
         //Can put testing here for server packets lost. Do this by testing previous tick number
 
         MovePlayer(movementInput);
+        JumpPlayer(playerJumpInput);
         RotatePlayer(cameraInput);
 
         TransformState state = new TransformState() {

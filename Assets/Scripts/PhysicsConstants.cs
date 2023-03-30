@@ -52,22 +52,44 @@ public class PhysicsConstants : MonoBehaviour
 
     }
 
-    public float objectGravity(float mass, float currentVelocity, float width1, float width2, bool _roundObject) {
-        float area = areaObjectCalculation(width1, width2, _roundObject);
-        float dragC = dragCoefficient(_roundObject);
-        float termVelocity = terminalVelocity(mass, area, dragC);
+    public float objectGravity(float mass, float currentVelocity, float width1, float width2, bool _roundObject, bool _usecustomtickrate = false, float tickRate = 1/60) {
 
-        float objectAcceleration;
-        float newObjectVelocity;
+        if (_usecustomtickrate) {
 
-        if (-currentVelocity < termVelocity) {
+            float area = areaObjectCalculation(width1, width2, _roundObject);
+            float dragC = dragCoefficient(_roundObject);
+            float termVelocity = terminalVelocity(mass, area, dragC);
 
-            objectAcceleration = -((((mass*gravity)-dragForce(mass, area, dragC, currentVelocity))/mass)*Time.deltaTime);
-            newObjectVelocity = currentVelocity + objectAcceleration;
+            float objectAcceleration;
+            float newObjectVelocity;
 
-            return newObjectVelocity;
+            if (-currentVelocity < termVelocity) {
+
+                objectAcceleration = -((((mass*gravity)-dragForce(mass, area, dragC, currentVelocity))/mass)*tickRate);
+                newObjectVelocity = currentVelocity + objectAcceleration;
+
+                return newObjectVelocity;
+            }
+            return currentVelocity;
+
+        } else {
+            float area = areaObjectCalculation(width1, width2, _roundObject);
+            float dragC = dragCoefficient(_roundObject);
+            float termVelocity = terminalVelocity(mass, area, dragC);
+
+            float objectAcceleration;
+            float newObjectVelocity;
+
+            if (-currentVelocity < termVelocity) {
+
+                objectAcceleration = -((((mass*gravity)-dragForce(mass, area, dragC, currentVelocity))/mass)*Time.deltaTime);
+                newObjectVelocity = currentVelocity + objectAcceleration;
+
+                return newObjectVelocity;
+            }
+            return currentVelocity;
         }
-        return currentVelocity;
+
     }
 
 
